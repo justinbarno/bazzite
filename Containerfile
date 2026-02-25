@@ -33,8 +33,8 @@ ARG ARCH="${ARCH:-x86_64}"
 
 ARG BASE_IMAGE="${BASE_IMAGE:-ghcr.io/ublue-os/${BASE_IMAGE_NAME}-main:${FEDORA_VERSION}}"
 ARG NVIDIA_BASE="${NVIDIA_BASE:-bazzite}"
-ARG KERNEL_REF="${KERNEL_REF:-ghcr.io/bazzite-org/kernel-bazzite:latest-f${FEDORA_VERSION}-${ARCH}}"
-ARG NVIDIA_REF="${NVIDIA_REF:-ghcr.io/bazzite-org/nvidia-drivers:latest-f${FEDORA_VERSION}-${ARCH}}"
+ARG KERNEL_REF="${KERNEL_REF:-ghcr.io/justinbarno/kernel-bazzite:latest-f${FEDORA_VERSION}-${ARCH}}"
+ARG NVIDIA_REF="${NVIDIA_REF:-ghcr.io/justinbarno/nvidia-drivers:latest-f${FEDORA_VERSION}-${ARCH}}"
 
 FROM ${KERNEL_REF} AS kernel
 FROM ${NVIDIA_REF} AS nvidia
@@ -382,7 +382,7 @@ RUN --mount=type=cache,dst=/var/cache \
             plasma-discover-kns \
             kcharselect \
             kde-partitionmanager \
-            plasma-discover \
+            plasma-discover && \
         sed -i '$r /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/bazzite-pins.js' /usr/share/plasma/layout-templates/org.kde.plasma.desktop.defaultPanel/contents/layout.js && \
         sed -i 's@\[Desktop Action new-window\]@\[Desktop Action new-window\]\nX-KDE-Shortcuts=Ctrl+Alt+T@g' /usr/share/applications/org.gnome.Ptyxis.desktop && \
         sed -i '/^Comment/d' /usr/share/applications/org.gnome.Ptyxis.desktop && \
