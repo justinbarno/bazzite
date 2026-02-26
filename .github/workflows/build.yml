@@ -1,7 +1,7 @@
 name: Build Bazzite
 on:
-  schedule:
-    - cron: "40 4 * * 1" # 4:40 utc monday
+  # schedule:
+  #   - cron: "40 4 * * 1" # 4:40 utc monday
   pull_request:
     branches:
       - testing
@@ -230,7 +230,7 @@ jobs:
           # and to confirm it is from a protected branch
           gh attestation verify -R justinbarno/kernel-bazzite \
             "oci://${{ steps.base.outputs.kernel_ref }}" --deny-self-hosted-runners
-          sudo podman pull ${{ steps.base.outputs.kernel_ref }}
+          sudo podman --log-level=debug pull ${{ steps.base.outputs.kernel_ref }}
 
           if [ "${{ steps.base.outputs.install_nvidia }}" == "true" ]; then
             sudo skopeo inspect docker://${{ steps.base.outputs.kernel_ref }} > kernel_source.json
@@ -239,7 +239,7 @@ jobs:
             # Same as above, we verify the uri moments before we pull it
             gh attestation verify -R justinbarno/bazzite-nvidia-drivers \
               "oci://$NVIDIA_REF" --deny-self-hosted-runners --source-ref "refs/heads/master"
-            sudo podman pull "$NVIDIA_REF"
+            sudo podman --log-level=debug pull "$NVIDIA_REF"
             echo "nvidia_ref=$NVIDIA_REF" >> $GITHUB_OUTPUT
           else
             echo "nvidia_ref=none" >> $GITHUB_OUTPUT
